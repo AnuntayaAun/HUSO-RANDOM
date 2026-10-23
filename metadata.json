@@ -1,0 +1,6 @@
+{
+  "name": "VEELOOP - Random Wheel",
+  "description": "วงล้อสุ่มหมุนลุ้นรางวัล VEELOOP ในโทนสีม่วงพาสเทลและขาว",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

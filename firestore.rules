@@ -1,0 +1,32 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isVerifiedGoogleUser(uid) {
+      return request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com'
+        && request.auth.token.email is string;
+    }
+
+    match /users/{uid} {
+      allow read, create, update: if isVerifiedGoogleUser(uid);
+      allow delete: if false;
+
+      match /workspace/{workspaceId} {
+        allow read, create, update: if workspaceId == 'current' && isVerifiedGoogleUser(uid);
+        allow delete: if false;
+      }
+
+      match /presets/{presetId} {
+        allow read, create, update, delete: if isVerifiedGoogleUser(uid);
+      }
+
+      match /history/{historyId} {
+        allow read, create, delete: if isVerifiedGoogleUser(uid);
+        allow update: if false;
+      }
+    }
+  }
+}
